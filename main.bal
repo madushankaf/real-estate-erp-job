@@ -1,6 +1,7 @@
 import ballerina/log;
 import ballerina/sql;
 import ballerinax/mysql;
+import ballerina/http;
 
 type RentalRequest record {
     string consumer_id;
@@ -31,6 +32,15 @@ mysql:Client dbClient = check new (user = USER, password = PASSWORD, database = 
     check from RentalRequest rentalRequest in resultStream
         do {
             log:printInfo("Rental Request: " + rentalRequest.toString());
+
+            // Call the endpoint
+            http:Client clientEndpoint = check new ("https://d52b01c3-4413-4648-aa17-45f6070d28b4-dev.e1-eu-north-azure.choreoapis.dev");
+            http:Response response = check clientEndpoint->post("/supply-chain/rental-integration-servic/v1/process", rentalRequest);
+
+
+
         };
+
+
 
 }
